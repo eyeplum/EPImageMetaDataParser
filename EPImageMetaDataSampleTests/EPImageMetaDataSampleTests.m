@@ -7,6 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
+#import "EPImageMetaDataParser.h"
 
 @interface EPImageMetaDataSampleTests : XCTestCase
 
@@ -14,21 +15,22 @@
 
 @implementation EPImageMetaDataSampleTests
 
-- (void)setUp
-{
+- (void)setUp {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
 }
 
-- (void)tearDown
-{
+
+- (void)tearDown {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
 }
 
-- (void)testExample
-{
-    XCTFail(@"No implementation for \"%s\"", __PRETTY_FUNCTION__);
+
+- (void)testMetaDataParserSingleton {
+    EPImageMetaDataParser *firstInstance = [EPImageMetaDataParser sharedMetaDataParser];
+    EPImageMetaDataParser *secondInstance = [EPImageMetaDataParser sharedMetaDataParser];
+    XCTAssertEqualObjects(firstInstance, secondInstance);
 }
 
 @end

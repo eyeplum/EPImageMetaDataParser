@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		523C552818A2E565E2E184CC /* EPImageMetaDataParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 523C57952ABE7FEE8F45BBE7 /* EPImageMetaDataParser.m */; };
+		523C5CE7AF5BA1AB64675CC3 /* EPImageMetaDataParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 523C57952ABE7FEE8F45BBE7 /* EPImageMetaDataParser.m */; };
 		9152906218CB36840042655A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9152906118CB36840042655A /* Cocoa.framework */; };
 		9152906C18CB36840042655A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9152906A18CB36840042655A /* InfoPlist.strings */; };
 		9152906E18CB36840042655A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9152906D18CB36840042655A /* main.m */; };
@@ -18,6 +20,7 @@
 		9152908218CB36850042655A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9152906118CB36840042655A /* Cocoa.framework */; };
 		9152908A18CB36850042655A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9152908818CB36850042655A /* InfoPlist.strings */; };
 		9152908C18CB36850042655A /* EPImageMetaDataSampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9152908B18CB36850042655A /* EPImageMetaDataSampleTests.m */; };
+		9152909618CB377F0042655A /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9152909518CB377F0042655A /* ImageIO.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,6 +34,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		523C54BF8C248A0F2C6D485D /* EPImageMetaDataParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EPImageMetaDataParser.h; sourceTree = "<group>"; };
+		523C57952ABE7FEE8F45BBE7 /* EPImageMetaDataParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EPImageMetaDataParser.m; sourceTree = "<group>"; };
 		9152905E18CB36840042655A /* EPImageMetaDataSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EPImageMetaDataSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9152906118CB36840042655A /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		9152906418CB36840042655A /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -50,6 +55,7 @@
 		9152908718CB36850042655A /* EPImageMetaDataSampleTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "EPImageMetaDataSampleTests-Info.plist"; sourceTree = "<group>"; };
 		9152908918CB36850042655A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		9152908B18CB36850042655A /* EPImageMetaDataSampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EPImageMetaDataSampleTests.m; sourceTree = "<group>"; };
+		9152909518CB377F0042655A /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9152909618CB377F0042655A /* ImageIO.framework in Frameworks */,
 				9152906218CB36840042655A /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -73,6 +80,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		523C5F9FCC061E9124DF29E7 /* EPImageMetaDataParser */ = {
+			isa = PBXGroup;
+			children = (
+				523C54BF8C248A0F2C6D485D /* EPImageMetaDataParser.h */,
+				523C57952ABE7FEE8F45BBE7 /* EPImageMetaDataParser.m */,
+			);
+			path = EPImageMetaDataParser;
+			sourceTree = "<group>";
+		};
 		9152905518CB36840042655A = {
 			isa = PBXGroup;
 			children = (
@@ -80,6 +96,7 @@
 				9152908518CB36850042655A /* EPImageMetaDataSampleTests */,
 				9152906018CB36840042655A /* Frameworks */,
 				9152905F18CB36840042655A /* Products */,
+				523C5F9FCC061E9124DF29E7 /* EPImageMetaDataParser */,
 			);
 			sourceTree = "<group>";
 		};
@@ -95,6 +112,7 @@
 		9152906018CB36840042655A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9152909518CB377F0042655A /* ImageIO.framework */,
 				9152906118CB36840042655A /* Cocoa.framework */,
 				9152908018CB36850042655A /* XCTest.framework */,
 				9152906318CB36840042655A /* Other Frameworks */,
@@ -255,6 +273,7 @@
 			files = (
 				9152906E18CB36840042655A /* main.m in Sources */,
 				9152907518CB36840042655A /* EPAppDelegate.m in Sources */,
+				523C5CE7AF5BA1AB64675CC3 /* EPImageMetaDataParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -263,6 +282,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9152908C18CB36850042655A /* EPImageMetaDataSampleTests.m in Sources */,
+				523C552818A2E565E2E184CC /* EPImageMetaDataParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -465,6 +485,7 @@
 				9152909118CB36850042655A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		9152909218CB36850042655A /* Build configuration list for PBXNativeTarget "EPImageMetaDataSampleTests" */ = {
 			isa = XCConfigurationList;
@@ -473,6 +494,7 @@
 				9152909418CB36850042655A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
