@@ -1,0 +1,22 @@
+# xcode noise
+build/*
+Build/**/*
+*.perspective
+*.perspectivev3
+*.pbxuser
+*.xcworkspace
+*.xcscheme
+*.mode1
+*.mode2v3
+*.mode1v3
+xcuserdata
+Snapshots
+
+# AppCode IDE noise
+.idea/*
+
+# osx noise
+.DS_Store
+
+# cocoapods noise
+Pods/*
