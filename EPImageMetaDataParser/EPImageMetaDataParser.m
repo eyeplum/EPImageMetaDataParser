@@ -8,6 +8,7 @@
 
 #import "EPImageMetaDataParser.h"
 
+
 static NSString * const kEPImageMetaDataParserErrorDomain = @"com.eyeplum.metaDataParserError";
 
 static const NSInteger  kInvalidURLErrorCode = -100;

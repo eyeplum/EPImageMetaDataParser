@@ -34,6 +34,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		523C519C5BF9025E3AA69E19 /* EPImageMetaDataConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EPImageMetaDataConstants.h; sourceTree = "<group>"; };
 		523C54BF8C248A0F2C6D485D /* EPImageMetaDataParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EPImageMetaDataParser.h; sourceTree = "<group>"; };
 		523C57952ABE7FEE8F45BBE7 /* EPImageMetaDataParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EPImageMetaDataParser.m; sourceTree = "<group>"; };
 		9152905E18CB36840042655A /* EPImageMetaDataSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EPImageMetaDataSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -85,6 +86,7 @@
 			children = (
 				523C54BF8C248A0F2C6D485D /* EPImageMetaDataParser.h */,
 				523C57952ABE7FEE8F45BBE7 /* EPImageMetaDataParser.m */,
+				523C519C5BF9025E3AA69E19 /* EPImageMetaDataConstants.h */,
 			);
 			path = EPImageMetaDataParser;
 			sourceTree = "<group>";

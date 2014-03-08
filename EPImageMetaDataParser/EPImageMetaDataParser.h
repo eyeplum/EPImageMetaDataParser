@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 eyeplum. All rights reserved.
 //
 
+#import "EPImageMetaDataConstants.h"
 
 
 @interface EPImageMetaDataParser : NSObject
