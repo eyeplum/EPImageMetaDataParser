@@ -12,14 +12,36 @@ typedef void(^EPImageMetaDataParseCompletionBlock)(BOOL success, NSDictionary *m
 
 @interface EPImageMetaDataParser : NSObject
 
-// Default range is 0-64KB
+/**
+ * The range of data can be downloaded to parse metadata.
+ * If set to {0, 0}, the download will continue until there is no more data.
+ * Default value is {0, 66560} (65KB).
+ */
 @property (nonatomic, assign) NSRange markerRange;
+
+/**
+ * The Completion Block.
+ * Will get called when parse succeeded or failed, or the image request failed.
+ */
 @property (nonatomic, copy) EPImageMetaDataParseCompletionBlock completionBlock;
 
+/**
+ * Convenient method to parse image metadata at given URL.
+ */
 + (void)parseImageMetaDataWithURL:(NSURL *)imageURL
                 completionHandler:(EPImageMetaDataParseCompletionBlock)completionBlock;
 
+/**
+ * Create a new instance of EPImageMetaDataParser with an image URL.
+ * The parsing will NOT start automatically.
+ * You MUST call [parser start]; in order to start the parse action.
+ * Or can use the convenient method above.
+ */
 - (instancetype)initWithImageURL:(NSURL *)imageURL;
+
+/**
+ * Start the parse action, when succeeded or failed, completionBlock will get called.
+ */
 - (void)start;
 
 @end
