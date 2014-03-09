@@ -7,6 +7,7 @@
 //
 
 #import "EPImageMetaDataParser.h"
+#import <ImageIO/ImageIO.h>
 
 
 static NSString * const kEPImageMetaDataParserErrorDomain = @"com.eyeplum.metaDataParserError";
