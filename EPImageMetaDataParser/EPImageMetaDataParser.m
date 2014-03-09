@@ -17,7 +17,7 @@ static NSString * const kInvalidURLError     = @"Image URL is invalid.";
 static const NSInteger  kMetaDataParseErrorCode = -200;
 static NSString * const kMetaDataParseError     = @"Failed to parse meta data.";
 
-static const NSUInteger kDefaultByteLength = 64 * 1024;
+static const NSUInteger kDefaultByteLength = 65 * 1024;
 
 static NSError *EPImageMetaDataParserError(NSInteger errorCode, NSString *errorReason)
 {
