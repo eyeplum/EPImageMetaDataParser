@@ -17,7 +17,7 @@ static NSString * const kInvalidURLError     = @"Image URL is invalid.";
 static const NSInteger  kMetaDataParseErrorCode = -200;
 static NSString * const kMetaDataParseError     = @"Failed to parse meta data.";
 
-static const NSUInteger kFixedBytesRange = 1024 * 64;
+static const NSUInteger kDefaultByteLength = 64 * 1024;
 
 static NSError *EPImageMetaDataParserError(NSInteger errorCode, NSString *errorReason)
 {
@@ -28,14 +28,50 @@ static NSError *EPImageMetaDataParserError(NSInteger errorCode, NSString *errorR
     }
 }
 
-static NSMutableURLRequest *EPImageMetaDataParseRequest(NSURL *imageURL, NSUInteger bytesOffset, NSUInteger bytesRange) {
+static NSMutableURLRequest *EPImageMetaDataParseRequest(NSURL *imageURL, NSRange markerRange)
+{
     @autoreleasepool {
-        NSMutableURLRequest *imageFetchRequest = [[NSMutableURLRequest alloc] initWithURL:imageURL];
-        NSString *rangeString = [NSString stringWithFormat:@"bytes=%@-%@", @(bytesOffset), @(bytesRange)];
-        [imageFetchRequest setValue:rangeString forHTTPHeaderField:@"Range"];
+        NSMutableURLRequest *imageFetchRequest = [[NSMutableURLRequest alloc] initWithURL:imageURL
+                                                                              cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
+                                                                          timeoutInterval:0];
+
+        if (!NSEqualRanges(NSMakeRange(0, 0), markerRange)) {
+            NSString *rangeString = [NSString stringWithFormat:@"bytes=%@-%@", @(markerRange.location), @(NSMaxRange(markerRange))];
+            [imageFetchRequest setValue:rangeString forHTTPHeaderField:@"Range"];
+        }
+
         return imageFetchRequest;
     }
 }
+
+static NSDictionary *EPImageMetaDataWithImageData(NSData *imageData)
+{
+    @autoreleasepool {
+        if (imageData == nil) {
+            return nil;
+        }
+
+        CGImageSourceRef imageSource = CGImageSourceCreateWithData((__bridge CFDataRef) imageData, NULL);
+        if (imageSource == nil) {
+            return nil;
+        }
+
+        NSDictionary *metaDataDictionary = CFBridgingRelease(CGImageSourceCopyPropertiesAtIndex(imageSource, 0, NULL));
+        CFRelease(imageSource);
+
+        return metaDataDictionary;
+    }
+}
+
+
+@interface EPImageMetaDataParser () <NSURLConnectionDataDelegate>
+
+@property (nonatomic, copy) EPImageMetaDataParseCompletionBlock completionBlock;
+@property (nonatomic, strong) NSMutableData *imageData;
+@property (nonatomic, strong) NSDictionary *metaData;
+@property (nonatomic, assign) BOOL connectionCancelled;
+
+@end
 
 
 @implementation EPImageMetaDataParser
@@ -53,62 +89,94 @@ static NSMutableURLRequest *EPImageMetaDataParseRequest(NSURL *imageURL, NSUInte
 }
 
 
+- (instancetype)init {
+    if (self = [super init]) {
+        _markerRange = NSMakeRange(0, kDefaultByteLength);
+    }
+
+    return self;
+}
+
+
 #pragma mark - Public Method
 
 - (void)parseMetaDataWithImageAtURL:(NSURL *)imageURL
-                  completionHandler:(void (^)(BOOL success, NSDictionary *metaData, NSError *error))completion {
+                  completionHandler:(EPImageMetaDataParseCompletionBlock)completionBlock {
 
     if (!imageURL) {
-        if (completion) {
-            completion(NO, nil, EPImageMetaDataParserError(kInvalidURLErrorCode, kInvalidURLError));
+        if (completionBlock) {
+            completionBlock(NO, nil, EPImageMetaDataParserError(kInvalidURLErrorCode, kInvalidURLError));
         }
         return;
     }
 
-    // FIXME: Hardcoded range is bad.
-    [NSURLConnection sendAsynchronousRequest:EPImageMetaDataParseRequest(imageURL, 0, kFixedBytesRange)
-                                       queue:[NSOperationQueue mainQueue]
-                           completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+    self.completionBlock = completionBlock;
+    self.imageData = [NSMutableData data];
+    self.metaData = [NSDictionary dictionary];
+    self.connectionCancelled = NO;
 
-                               if (data == nil) {
-                                   if (completion) {
-                                       completion(NO, nil, connectionError);
-                                   }
-                                   return;
-                               }
-
-                               NSDictionary *metaData = [self metaDataWithImageData:data];
-                               if (metaData == nil) {
-                                   if (completion) {
-                                       completion(NO, nil, EPImageMetaDataParserError(kMetaDataParseErrorCode, kMetaDataParseError));
-                                   }
-                                   return;
-                               }
-
-                               if (completion) {
-                                   completion(YES, metaData, nil);
-                               }
-
-                           }];
+    [NSURLConnection connectionWithRequest:EPImageMetaDataParseRequest(imageURL, self.markerRange)
+                                  delegate:self];
 }
 
 
-#pragma mark - Utility
+#pragma mark - NSURLConnectionDelegate
 
-- (NSDictionary *)metaDataWithImageData:(NSData *)imageData {
-    if (imageData == nil) {
-        return nil;
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+    if (self.connectionCancelled) {
+        return;
     }
 
-    CGImageSourceRef imageSource = CGImageSourceCreateWithData((__bridge CFDataRef) imageData, NULL);
-    if (imageSource == nil) {
-        return nil;
+    if (self.completionBlock) {
+        self.completionBlock(NO, nil, error);
     }
 
-    NSDictionary *metaDataDictionary = CFBridgingRelease(CGImageSourceCopyPropertiesAtIndex(imageSource, 0, NULL));
-    CFRelease(imageSource);
+    self.imageData = nil;
+    self.completionBlock = nil;
+    self.metaData = nil;
+}
 
-    return metaDataDictionary;
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+    if (self.connectionCancelled) {
+        return;
+    }
+
+    if (self.completionBlock) {
+        NSError *parseError;
+
+        BOOL success = self.metaData.count > 0;
+        if (!success) {
+            parseError = EPImageMetaDataParserError(kMetaDataParseErrorCode, kMetaDataParseError);
+        }
+
+        self.completionBlock(success, self.metaData, parseError);
+    }
+
+    self.imageData = nil;
+    self.completionBlock = nil;
+    self.metaData = nil;
+}
+
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+    if (self.connectionCancelled) {
+        return;
+    }
+
+    [self.imageData appendData:data];
+
+    self.metaData = EPImageMetaDataWithImageData(self.imageData);
+    if (self.metaData.count > 0) {
+        [connection cancel];
+        [self connectionDidFinishLoading:connection];
+        self.connectionCancelled = YES;
+    }
+}
+
+
+- (NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse {
+    return nil;
 }
 
 @end

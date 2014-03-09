@@ -687,7 +687,7 @@
                     <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8XM-me-p9f">
                         <rect key="frame" x="20" y="318" width="309" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" title="https://lh6.googleusercontent.com/-Ix36Dr6831I/Ts5zw86MkfI/AAAAAAAAKEM/arBfdNo3F0o/s0-I/IMG_3409.jpg" drawsBackground="YES" id="xOE-rS-qAN">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" title="http://lh6.googleusercontent.com/-Ix36Dr6831I/Ts5zw86MkfI/AAAAAAAAKEM/arBfdNo3F0o/s0-I/IMG_3409.jpg" drawsBackground="YES" id="xOE-rS-qAN">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
