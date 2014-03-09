@@ -11,13 +11,13 @@
 
 static NSString * const kEPImageMetaDataParserErrorDomain = @"com.eyeplum.metaDataParserError";
 
-static const NSInteger  kInvalidURLErrorCode = -100;
-static NSString * const kInvalidURLError     = @"Image URL is invalid.";
+static const NSInteger  kInvalidURLErrorCode    = -100;
+static NSString * const kInvalidURLError        = @"Image URL is invalid.";
 
 static const NSInteger  kMetaDataParseErrorCode = -200;
 static NSString * const kMetaDataParseError     = @"Failed to parse meta data.";
 
-static const NSUInteger kDefaultByteLength = 65 * 1024;
+static const NSUInteger kDefaultByteLength      = 65 * 1024;
 
 static NSError *EPImageMetaDataParserError(NSInteger errorCode, NSString *errorReason)
 {
@@ -66,7 +66,7 @@ static NSDictionary *EPImageMetaDataWithImageData(NSData *imageData)
 
 @interface EPImageMetaDataParser () <NSURLConnectionDataDelegate>
 
-@property (nonatomic, copy) EPImageMetaDataParseCompletionBlock completionBlock;
+@property (nonatomic, strong) NSURLConnection *connection;
 @property (nonatomic, strong) NSMutableData *imageData;
 @property (nonatomic, strong) NSDictionary *metaData;
 @property (nonatomic, assign) BOOL connectionCancelled;
@@ -76,33 +76,9 @@ static NSDictionary *EPImageMetaDataWithImageData(NSData *imageData)
 
 @implementation EPImageMetaDataParser
 
-#pragma mark - Shared Instance
+#pragma mark - Convenient Method
 
-+ (instancetype)sharedMetaDataParser {
-    static dispatch_once_t onceToken;
-    static EPImageMetaDataParser *_sharedParser;
-    dispatch_once(&onceToken, ^{
-        _sharedParser = [[self alloc] init];
-    });
-
-    return _sharedParser;
-}
-
-
-- (instancetype)init {
-    if (self = [super init]) {
-        _markerRange = NSMakeRange(0, kDefaultByteLength);
-    }
-
-    return self;
-}
-
-
-#pragma mark - Public Method
-
-- (void)parseMetaDataWithImageAtURL:(NSURL *)imageURL
-                  completionHandler:(EPImageMetaDataParseCompletionBlock)completionBlock {
-
++ (void)parseImageMetaDataWithURL:(NSURL *)imageURL completionHandler:(EPImageMetaDataParseCompletionBlock)completionBlock {
     if (!imageURL) {
         if (completionBlock) {
             completionBlock(NO, nil, EPImageMetaDataParserError(kInvalidURLErrorCode, kInvalidURLError));
@@ -110,13 +86,38 @@ static NSDictionary *EPImageMetaDataWithImageData(NSData *imageData)
         return;
     }
 
-    self.completionBlock = completionBlock;
-    self.imageData = [NSMutableData data];
-    self.metaData = [NSDictionary dictionary];
-    self.connectionCancelled = NO;
+    EPImageMetaDataParser *parser = [[EPImageMetaDataParser alloc] initWithImageURL:imageURL];
+    [parser setCompletionBlock:completionBlock];
+    [parser start];
+}
 
-    [NSURLConnection connectionWithRequest:EPImageMetaDataParseRequest(imageURL, self.markerRange)
-                                  delegate:self];
+
+#pragma mark - Initializer
+
+- (instancetype)initWithImageURL:(NSURL *)imageURL {
+    if (!imageURL) {
+        return nil;
+    }
+
+    if (self = [super init]) {
+        _markerRange = NSMakeRange(0, kDefaultByteLength);
+        _imageData = [NSMutableData data];
+        _metaData = [NSDictionary dictionary];
+        _connectionCancelled = NO;
+
+        _connection = [[NSURLConnection alloc] initWithRequest:EPImageMetaDataParseRequest(imageURL, self.markerRange)
+                                                      delegate:self
+                                              startImmediately:NO];
+    }
+
+    return self;
+}
+
+
+#pragma mark - Start Connection
+
+- (void)start {
+    [self.connection start];
 }
 
 

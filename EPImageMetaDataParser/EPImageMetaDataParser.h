@@ -8,17 +8,18 @@
 
 #import "EPImageMetaDataConstants.h"
 
-typedef void(^EPImageMetaDataParseCompletionBlock)(BOOL, NSDictionary *, NSError *);
+typedef void(^EPImageMetaDataParseCompletionBlock)(BOOL success, NSDictionary *metaData, NSError *error);
 
 @interface EPImageMetaDataParser : NSObject
 
 // Default range is 0-64KB
 @property (nonatomic, assign) NSRange markerRange;
+@property (nonatomic, copy) EPImageMetaDataParseCompletionBlock completionBlock;
 
-+ (instancetype)sharedMetaDataParser;
-- (instancetype)init;
++ (void)parseImageMetaDataWithURL:(NSURL *)imageURL
+                completionHandler:(EPImageMetaDataParseCompletionBlock)completionBlock;
 
-- (void)parseMetaDataWithImageAtURL:(NSURL *)imageURL
-                  completionHandler:(EPImageMetaDataParseCompletionBlock)completionBlock;
+- (instancetype)initWithImageURL:(NSURL *)imageURL;
+- (void)start;
 
 @end
