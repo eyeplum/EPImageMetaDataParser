@@ -27,10 +27,8 @@
 }
 
 
-- (void)testMetaDataParserSingleton {
-    EPImageMetaDataParser *firstInstance = [EPImageMetaDataParser sharedMetaDataParser];
-    EPImageMetaDataParser *secondInstance = [EPImageMetaDataParser sharedMetaDataParser];
-    XCTAssertEqualObjects(firstInstance, secondInstance);
+- (void)test {
+    XCTFail(@"No test yet.");
 }
 
 @end
