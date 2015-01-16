@@ -35,7 +35,7 @@ typedef void(^EPImageMetaDataParseCompletionBlock)(BOOL success, NSDictionary *m
  * Create a new instance of EPImageMetaDataParser with an image URL.
  * The parsing will NOT start automatically.
  * You MUST call [parser start]; in order to start the parse action.
- * Or can use the convenient method above.
+ * Or you can use the convenient method above.
  */
 - (instancetype)initWithImageURL:(NSURL *)imageURL;
 

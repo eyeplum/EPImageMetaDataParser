@@ -13,7 +13,7 @@
 static NSString * const kEPImageMetaDataParserErrorDomain = @"com.eyeplum.metaDataParserError";
 
 static const NSInteger  kInvalidURLErrorCode    = -100;
-static NSString * const kInvalidURLError        = @"Image URL is invalid.";
+static NSString * const kInvalidURLError        = @"Invalid image URL.";
 
 static const NSInteger  kMetaDataParseErrorCode = -200;
 static NSString * const kMetaDataParseError     = @"Failed to parse meta data.";
